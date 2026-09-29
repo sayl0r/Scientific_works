@@ -30,4 +30,4 @@ Scientific_works/
 | Слукин Юрий Алексеевич     | [@sayl0r](https://github.com/sayl0r)     |
 | Геграев Ислам Русланович   | [@LiTot52](https://github.com/LiTot52)   |
 | Кулябцев Богдан Михайлович | [@Yupiiik](https://github.com/Yupiiik)   |
-| Мамие Ибрагим Ахмедович    | [@Dexon366](https://github.com/Dexon366) |
+| Мамиев Ибрагим Ахмедович    | [@Dexon366](https://github.com/Dexon366) |
