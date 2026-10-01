@@ -82,8 +82,8 @@ def distance_pnp(corners_2d: np.ndarray, mtx: np.ndarray, dist: np.ndarray,
     # 3D-координаты углов QR в системе маркера (плоскость Z=0)
     obj_points = np.array([
         [-half, -half, 0],
-        [ half, -half, 0],
-        [ half,  half, 0],
+        [half, -half, 0],
+        [half,  half, 0],
         [-half,  half, 0],
     ], dtype=np.float32)
 
@@ -98,25 +98,17 @@ def distance_pnp(corners_2d: np.ndarray, mtx: np.ndarray, dist: np.ndarray,
     return float(np.linalg.norm(tvec)), rvec, tvec
 
 
-# ============================================================
-# ПАРСИНГ ИМЕНИ ФАЙЛА
-# ============================================================
+# ---------- ПАРСИНГ ИМЕНИ ФАЙЛА ----------
+
 
 def parse_filename(stem: str):
-    """
-    Ожидаемый формат: d060_a30_2
-    Возвращает (distance_cm, angle_deg, repeat) или (None, None, None).
-    """
     m = re.match(r'd(\d{2,3})_a(\d{1,2})_(\d+)', stem)
     if not m:
         return None, None, None
     return int(m.group(1)), int(m.group(2)), int(m.group(3))
 
 
-# ============================================================
-# ОБРАБОТКА ОДНОГО ИЗОБРАЖЕНИЯ
-# ============================================================
-
+# ---------- ОБРАБОТКА ОДНОГО ИЗОБРАЖЕНИЯ ----------
 qr_detector = cv2.QRCodeDetector()
 
 
@@ -156,11 +148,13 @@ def process_image(img_path: Path, mtx, dist, focal_px,
     err_simple = None
     err_pnp = None
     if real_distance_cm is not None:
-        err_simple = abs(d_simple_cm - real_distance_cm) / real_distance_cm * 100.0
+        err_simple = abs(d_simple_cm - real_distance_cm) / \
+            real_distance_cm * 100.0
         if d_pnp_cm is not None:
-            err_pnp = abs(d_pnp_cm - real_distance_cm) / real_distance_cm * 100.0
+            err_pnp = abs(d_pnp_cm - real_distance_cm) / \
+                real_distance_cm * 100.0
 
-    # ---- Визуализация ----
+# ---------- ОБРАБОТКА ОДНОГО ИЗОБРАЖЕНИЯ ----------
     vis = img_undist.copy()
     cv2.polylines(vis, [points.astype(int)], True, (0, 255, 0), 2)
     for i, p in enumerate(points):
@@ -198,9 +192,7 @@ def process_image(img_path: Path, mtx, dist, focal_px,
     }
 
 
-# ============================================================
-# ПОСТРОЕНИЕ ГРАФИКОВ
-# ============================================================
+# ---------- ПОСТРОЕНИЕ ГРАФИКОВ ----------
 
 def build_plots(df: pd.DataFrame):
     """Строит графики погрешностей от расстояния и угла."""
@@ -258,10 +250,8 @@ def build_plots(df: pd.DataFrame):
     print(f'[i] Графики сохранены: {out}')
     plt.close()
 
+# ---------- MAIN ----------
 
-# ============================================================
-# MAIN
-# ============================================================
 
 def main():
     print('=' * 60)
