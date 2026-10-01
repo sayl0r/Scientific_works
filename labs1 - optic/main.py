@@ -24,9 +24,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-# ============================================================
-# НАСТРОЙКИ
-# ============================================================
+# ---------- НАСТРОЙКИ ----------
 
 RESULTS_DIR = Path('results')
 TEST_DIR = Path('data/qr_test')
@@ -39,9 +37,7 @@ ERROR_THRESHOLD = 5.0       # порог гипотезы, %
 RESULTS_DIR.mkdir(exist_ok=True)
 
 
-# ============================================================
-# ЗАГРУЗКА КАЛИБРОВКИ
-# ============================================================
+# ---------- ЗАГРУЗКА КАЛИБРОВКИ ----------
 
 def load_calibration(path: Path):
     """Загружает матрицу камеры и коэффициенты дисторсии."""
@@ -58,9 +54,7 @@ def load_calibration(path: Path):
     return mtx, dist, focal_px
 
 
-# ============================================================
-# ОЦЕНКА РАССТОЯНИЯ
-# ============================================================
+# ---------- ОЦЕНКА РАССТОЯНИЯ ----------
 
 def distance_simple(qr_width_px: float, focal_px: float,
                     real_size_mm: float = QR_REAL_SIZE_MM) -> float:
@@ -109,6 +103,7 @@ def parse_filename(stem: str):
 
 
 # ---------- ОБРАБОТКА ОДНОГО ИЗОБРАЖЕНИЯ ----------
+
 qr_detector = cv2.QRCodeDetector()
 
 
@@ -155,6 +150,7 @@ def process_image(img_path: Path, mtx, dist, focal_px,
                 real_distance_cm * 100.0
 
 # ---------- ОБРАБОТКА ОДНОГО ИЗОБРАЖЕНИЯ ----------
+
     vis = img_undist.copy()
     cv2.polylines(vis, [points.astype(int)], True, (0, 255, 0), 2)
     for i, p in enumerate(points):
@@ -251,7 +247,6 @@ def build_plots(df: pd.DataFrame):
     plt.close()
 
 # ---------- MAIN ----------
-
 
 def main():
     print('=' * 60)
