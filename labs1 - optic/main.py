@@ -176,16 +176,16 @@ def process_image(img_path: Path, mtx, dist, focal_px,
     cv2.imwrite(str(out_path), vis)
 
     return {
-        'file': img_path.name,
-        'qr_data': data,
-        'd_real_cm': real_distance_cm,
-        'angle_deg': angle_deg,
-        'qr_width_px': round(qr_width_px, 1),
-        'd_simple_cm': round(d_simple_cm, 2),
-        'd_pnp_cm': round(d_pnp_cm, 2) if d_pnp_cm is not None else None,
-        'err_simple_%': round(err_simple, 2) if err_simple is not None else None,
-        'err_pnp_%': round(err_pnp, 2) if err_pnp is not None else None,
-    }
+    'Имя_файла': img_path.name,
+    'Дата': data,
+    'Дистанция': real_distance_cm,
+    'Угол_град': angle_deg,
+    'Ширина_QR_пикс': round(qr_width_px, 1),
+    'Дистанция_простая_см': round(d_simple_cm, 2),
+    'Дистанция_PnP_см': round(d_pnp_cm, 2) if d_pnp_cm is not None else None,
+    'Ошибка_простая_%': round(err_simple, 2) if err_simple is not None else None,
+    'Ошибка_PnP_%': round(err_pnp, 2) if err_pnp is not None else None,
+}
 
 
 # ---------- ПОСТРОЕНИЕ ГРАФИКОВ ----------
@@ -195,14 +195,14 @@ def build_plots(df: pd.DataFrame):
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
     # --- График 1: ошибка от расстояния при угле 0° ---
-    sub = (df[df['angle_deg'] == 0]
-           .groupby('d_real_cm')['err_simple_%']
+    sub = (df[df['Угол_град'] == 0]
+           .groupby('Дистанция')['Ошибка_простая_%']
            .agg(['mean', 'std']))
     if not sub.empty:
         axes[0].errorbar(sub.index, sub['mean'], yerr=sub['std'].fillna(0),
                          marker='o', capsize=5, label='Simple')
-    sub_pnp = (df[df['angle_deg'] == 0]
-               .groupby('d_real_cm')['err_pnp_%']
+    sub_pnp = (df[df['Угол_град'] == 0]
+               .groupby('Дистанция')['Ошибка_PnP_%']
                .agg(['mean', 'std']))
     if not sub_pnp.empty:
         axes[0].errorbar(sub_pnp.index, sub_pnp['mean'],
@@ -218,14 +218,14 @@ def build_plots(df: pd.DataFrame):
     axes[0].grid(True, alpha=0.3)
 
     # --- График 2: ошибка от угла при расстоянии 60 см ---
-    sub2 = (df[df['d_real_cm'] == 60]
-            .groupby('angle_deg')['err_simple_%']
+    sub2 = (df[df['Дистанция'] == 60]
+            .groupby('Угол_град')['Ошибка_простая_%']
             .agg(['mean', 'std']))
     if not sub2.empty:
         axes[1].errorbar(sub2.index, sub2['mean'], yerr=sub2['std'].fillna(0),
                          marker='s', capsize=5, color='orange', label='Simple')
-    sub2_pnp = (df[df['d_real_cm'] == 60]
-                .groupby('angle_deg')['err_pnp_%']
+    sub2_pnp = (df[df['Дистанция'] == 60]
+                .groupby('Угол_град')['Ошибка_PnP_%']
                 .agg(['mean', 'std']))
     if not sub2_pnp.empty:
         axes[1].errorbar(sub2_pnp.index, sub2_pnp['mean'],
@@ -283,13 +283,13 @@ def main():
     print(df.to_string(index=False))
 
     # --- Сводная таблица погрешностей ---
-    if df['err_simple_%'].notna().any():
+    if df['Ошибка_простая_%'].notna().any():
         pivot = df.pivot_table(
-            values='err_simple_%',
-            index='d_real_cm',
-            columns='angle_deg',
+            values='Ошибка_простая_%',
+            index='Дистанция',
+            columns='Угол_град',
             aggfunc='mean',
-        )
+        ) 
         pivot_path = RESULTS_DIR / 'pivot_table.csv'
         pivot.round(2).to_csv(pivot_path, encoding='utf-8-sig')
         print(f'\n[i] Сводная таблица: {pivot_path}')
@@ -303,10 +303,10 @@ def main():
     print('\n' + '=' * 60)
     print('ПРОВЕРКА ГИПОТЕЗЫ')
     print('=' * 60)
-    sub = df[(df['d_real_cm'].between(30, 150)) & (df['angle_deg'] <= 30)]
-    if not sub.empty and sub['err_simple_%'].notna().any():
-        mean_err = sub['err_simple_%'].mean()
-        max_err = sub['err_simple_%'].max()
+    sub = df[(df['Дистанция'].between(30, 150)) & (df['Угол_град'] <= 30)]
+    if not sub.empty and sub['Ошибка_простая_%'].notna().any():
+        mean_err = sub['Ошибка_простая_%'].mean()
+        max_err = sub['Ошибка_простая_%'].max()
         print(f'Диапазон 30–150 см, угол ≤ 30°:')
         print(f'  Средняя погрешность Simple: {mean_err:.2f}%')
         print(f'  Максимальная погрешность:    {max_err:.2f}%')
