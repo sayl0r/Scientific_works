@@ -2,6 +2,14 @@
 
 Репозиторий с работами по **научно-исследовательской практике**: практические задания, эксперименты, лабораторные и мини-исследования по курсу.
 
+## Содержание
+ 
+- [Scientific works](#scientific-works)
+  - [Содержание](#содержание)
+  - [О репозитории](#о-репозитории)
+  - [Структура](#структура)
+  - [Авторы](#авторы)
+
 ## О репозитории
 
 Здесь собраны выполненные работы, оформленные в виде отдельных папок. Каждая работа - самостоятельный мини-проект со своим кодом, данными и README.
@@ -10,17 +18,18 @@
 
 ```
 Scientific_works/
-├── Readme.md                
-├── .vscode
-└── lab1_optics/
-    ├── Readme.md            
-    ├── requirements.txt
-    ├── calibrate.py
-    ├── main.py
-    ├── data/
-    │   ├── chessboard/
-    │   └── qr_test/
-    └── results/
+├── .vscode/
+├── labs1 - optic/
+│   ├── data/
+│   │   ├── chessboard/
+│   │   └── qr_test/
+│   ├── results/
+│   ├── calibrate.py
+│   ├── main.py
+│   └── requirements.txt
+├── labs2/
+│   └── Отчёт по практике.docx
+└── Readme.md
 ```
 
 ## Авторы
@@ -30,4 +39,4 @@ Scientific_works/
 | Слукин Юрий Алексеевич     | [@sayl0r](https://github.com/sayl0r)     |
 | Геграев Ислам Русланович   | [@LiTot52](https://github.com/LiTot52)   |
 | Кулябцев Богдан Михайлович | [@Yupiiik](https://github.com/Yupiiik)   |
-| Мамиев Ибрагим Ахмедович    | [@Dexon366](https://github.com/Dexon366) |
+| Мамиев Ибрагим Ахмедович   | [@Dexon366](https://github.com/Dexon366) |
